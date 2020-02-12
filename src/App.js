@@ -1,8 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { gql } from "apollo-boost";
+import { useMutation } from "@apollo/react-hooks";
 
 function App() {
+  const LOGIN = gql`
+    mutation {
+      login(email: "", password: "") {
+        user {
+          id
+          name
+          email
+          posts {
+            id
+            title
+            published
+            comments {
+              text
+            }
+          }
+        }
+        token
+      }
+    }
+  `;
+  const [login, data] = useMutation(LOGIN);
+  useEffect(() => {
+    login();
+  }, [login]);
+
+  console.log("Login data", data);
   return (
     <div className="App">
       <header className="App-header">
